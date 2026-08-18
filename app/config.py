@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     DATABASE_URL: str
+    DB_POOL_SIZE: int
+    DB_MAX_OVERFLOW: int
     
     SECRET_KEY: str
     ALGORITHM: str
