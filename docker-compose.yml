@@ -1,0 +1,40 @@
+services:
+
+  redis:
+    image: redis:7-alpine
+    container_name: autopedicare_redis
+
+    ports:
+      - "6379:6379"
+
+    command: redis-server --appendonly yes
+
+    volumes:
+      - redis_data:/data
+
+    restart: unless-stopped
+
+
+  api:
+    build: .
+
+    container_name: autopedicare_api
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    depends_on:
+      - redis
+
+    volumes:
+      - .:/app
+
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+
+volumes:
+
+  redis_data:

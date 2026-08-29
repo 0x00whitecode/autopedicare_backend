@@ -18,6 +18,7 @@ email-validator==2.3.0
 fastapi==0.135.1
 fastapi-cli==0.0.24
 fastapi-cloud-cli==0.14.0
+fastar==0.11.0
 google-auth==2.48.0
 greenlet==3.3.2
 h11==0.16.0
@@ -53,6 +54,7 @@ python-dotenv==1.2.2
 python-jose==3.5.0
 python-multipart==0.0.22
 PyYAML==6.0.3
+redis==8.1.0
 requests==2.32.5
 rich==14.3.3
 rich-toolkit==0.19.7

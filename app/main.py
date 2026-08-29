@@ -1,13 +1,31 @@
+import logging
 from dataclasses import asdict
 
 from fastapi import FastAPI, Request
 
+from app.auth.router import router as auth_router
+from app.config import settings
+from app.core.logging import setup_logging
 from app.core.middleware import UserContextMiddleware
+
+setup_logging(debug=settings.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 app = FastAPI()
 
 app.add_middleware(UserContextMiddleware)
+app.include_router(auth_router)
+
+
+@app.on_event("startup")
+async def startup_event() -> None:
+    logger.info("FastAPI application started", extra={"event": "startup"})
+
+
+@app.on_event("shutdown")
+async def shutdown_event() -> None:
+    logger.info("FastAPI application shutting down", extra={"event": "shutdown"})
 
 
 @app.get("/")

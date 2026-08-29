@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Auth Test</title>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+
+    <h2>AutoPedicare Google Auth Test</h2>
+
+    <div
+        id="g_id_onload"
+        data-client_id="766523713980-21n4916uqdgkv5gcru8ilrfqnvpv6t69.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+    ></div>
+
+    <div
+        class="g_id_signin"
+        data-type="standard"
+    ></div>
+
+    <script>
+        function handleCredentialResponse(response) {
+            console.log("Google ID Token:");
+            console.log(response.credential);
+
+            document.body.innerHTML += `
+                <h3>ID Token:</h3>
+                <textarea rows="20" cols="100">
+${response.credential}
+                </textarea>
+            `;
+        }
+    </script>
+
+</body>
+</html>

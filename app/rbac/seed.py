@@ -1,13 +1,15 @@
 import asyncio
+import logging
 
 from sqlalchemy import select
 
-from app.database import AsyncSessionLocal
-from app.rbac.models import Role, Permission, RolePermission, UserRole
-from app.users.models import User
 from app.auth.models import UserLoginHistory
+from app.database import AsyncSessionLocal
 from app.onboarding.models import OnboardingRequest
+from app.rbac.models import Permission, Role, RolePermission, UserRole
+from app.users.models import User
 
+logger = logging.getLogger(__name__)
 
 ROLES = {
     "car_owner": "A customer who owns or manages a vehicle.",
@@ -122,10 +124,10 @@ async def seed_rbac() -> None:
 
                 session.add(role)
 
-                print(f"Created role: {role_name}")
+                logger.info("Created role: %s", role_name)
 
             else:
-                print(f"Role already exists: {role_name}")
+                logger.info("Role already exists: %s", role_name)
 
             roles[role_name] = role
 
@@ -151,10 +153,10 @@ async def seed_rbac() -> None:
 
                 session.add(permission)
 
-                print(f"Created permission: {permission_name}")
+                logger.info("Created permission: %s", permission_name)
 
             else:
-                print(f"Permission already exists: {permission_name}")
+                logger.info("Permission already exists: %s", permission_name)
 
             permissions[permission_name] = permission
 
@@ -185,24 +187,23 @@ async def seed_rbac() -> None:
                         )
                     )
 
-                    print(
-                        f"Assigned permission "
-                        f"'{permission_name}' "
-                        f"to role '{role_name}'"
+                    logger.info(
+                        "Assigned permission '%s' to role '%s'",
+                        permission_name,
+                        role_name,
                     )
 
                 else:
-                    print(
-                        f"Permission '{permission_name}' "
-                        f"already assigned to '{role_name}'"
+                    logger.info(
+                        "Permission '%s' already assigned to '%s'",
+                        permission_name,
+                        role_name,
                     )
 
         await session.commit()
 
-        print()
-        print("========================================")
-        print("RBAC seed completed successfully.")
-        print("========================================")
+        logger.info("RBAC seed completed successfully.")
+
 
 if __name__ == "__main__":
     asyncio.run(seed_rbac())
