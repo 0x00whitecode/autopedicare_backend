@@ -7,15 +7,22 @@ from app.auth.router import router as auth_router
 from app.config import settings
 from app.core.logging import setup_logging
 from app.core.middleware import UserContextMiddleware
+from app.vehicles.router import router as vehicles_router
 
 setup_logging(debug=settings.DEBUG)
 logger = logging.getLogger(__name__)
 
-
-app = FastAPI()
+app = FastAPI(
+    title="Vehicle Management API",
+    version="1.0.0",
+    description="Secure vehicle management backend with Google OAuth, RBAC, and refresh token rotation",
+)
 
 app.add_middleware(UserContextMiddleware)
-app.include_router(auth_router)
+
+api_prefix = "/api/v1"
+app.include_router(auth_router, prefix=api_prefix)
+app.include_router(vehicles_router, prefix=api_prefix)
 
 
 @app.on_event("startup")
@@ -30,12 +37,22 @@ async def shutdown_event() -> None:
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello, World!"}
+    return {"message": "Vehicle Management API", "version": "1.0.0"}
 
 
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+
+@app.get("/health/live")
+def liveness_check():
+    return {"status": "alive"}
+
+
+@app.get("/health/ready")
+def readiness_check():
+    return {"status": "ready"}
 
 
 @app.get("/debug/context")
