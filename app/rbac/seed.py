@@ -16,6 +16,10 @@ ROLES = {
     "mechanic": "An approved automotive mechanic.",
     "company": "An approved automotive service or towing company.",
     "admin": "An administrator with assigned administrative permissions.",
+    "commerce_admin": "A commerce department administrator for product, inventory, and order operations.",
+    "product_manager": "Owns the catalog and product lifecycle for commerce.",
+    "inventory_manager": "Owns stock availability and replenishment decisions.",
+    "order_manager": "Owns order processing and fulfillment activity.",
     "superadmin": "A system administrator with unrestricted access.",
 }
 
@@ -54,6 +58,14 @@ PERMISSIONS = {
     "manage_finance": "Manage financial administration.",
     "manage_marketing": "Manage marketing administration.",
     "manage_regulated_roles": "Manage regulated roles and approvals.",
+
+    # Commerce operations
+    "manage_products": "Create, update, and deactivate products.",
+    "manage_inventory": "Manage inventory, stock thresholds, and reservations.",
+    "manage_orders": "Manage order fulfillment and status transitions.",
+    "view_commerce_ledger": "View the commerce transaction ledger and order payment summary.",
+    "manage_own_cart": "Add, update, and remove items in your own cart.",
+    "view_own_orders": "View your own orders and order history.",
 }
 
 
@@ -97,8 +109,38 @@ ROLE_PERMISSIONS = {
         "manage_marketing",
         "manage_regulated_roles",
     ],
-
-    "superadmin": [],
+    "commerce_admin": [
+        "view_own_profile",
+        "update_own_profile",
+        "manage_products",
+        "manage_inventory",
+        "manage_orders",
+        "view_commerce_ledger",
+        "view_own_orders",
+        "manage_own_cart",
+    ],
+    "product_manager": [
+        "view_own_profile",
+        "manage_products",
+    ],
+    "inventory_manager": [
+        "view_own_profile",
+        "manage_inventory",
+        "view_commerce_ledger",
+    ],
+    "order_manager": [
+        "view_own_profile",
+        "manage_orders",
+        "view_own_orders",
+        "view_commerce_ledger",
+    ],
+    "superadmin": [
+        "manage_products",
+        "manage_inventory",
+        "manage_orders",
+        "view_commerce_ledger",
+        "manage_finance",
+    ],
 }
 
 

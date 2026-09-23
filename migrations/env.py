@@ -11,6 +11,17 @@ from app.users.models import User
 from app.auth.models import UserLoginHistory, RefreshToken
 from app.onboarding.models import OnboardingRequest
 from app.vehicles.models import Vehicle
+from app.fleet.models import FleetVehicle
+from app.payments.models import PaymentGatewaySettings, WalletTransaction
+from app.ecommerce.models import (
+    Product,
+    ProductSearchIndex,
+    InventoryItem,
+    Cart,
+    CartItem,
+    Order,
+    OrderItem,
+)
 from app.rbac.models import (
     Role,
     Permission,

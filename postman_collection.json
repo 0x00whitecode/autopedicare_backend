@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Vehicle Management API",
-    "description": "Postman collection for the Vehicle Management API. Covers health checks, authentication (Google OAuth, refresh token rotation, token revocation), and full vehicle CRUD operations.\n\n## Setup\n1. Set the `base_url` variable to your API host (default: http://localhost:8000)\n2. After calling Google Auth, the `access_token` and `refresh_token` variables are auto-populated from the response.\n3. All authenticated endpoints use the `access_token` variable in the Authorization header automatically.",
+    "description": "Postman collection for the Vehicle Management API and Commerce backend. Covers health checks, Google OAuth, refresh-token rotation, vehicle CRUD, product catalog, inventory, cart, checkout, search, recommendations, and admin ledger access.\n\n## Setup\n1. Set the base_url variable to your API host (default: http://localhost:8000)\n2. After calling Google Auth, the access_token and refresh_token variables are auto-populated from the response.\n3. All authenticated endpoints use the access_token variable in the Authorization header automatically.\n4. Commerce requests can create or reuse a product_id value saved by the collection tests.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -22,6 +22,21 @@
     },
     {
       "key": "vehicle_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "product_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cart_id",
       "value": "",
       "type": "string"
     }
@@ -47,8 +62,12 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/",
-              "host": ["{{base_url}}"],
-              "path": [""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ""
+              ]
             }
           },
           "response": []
@@ -60,8 +79,12 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/health",
-              "host": ["{{base_url}}"],
-              "path": ["health"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
             }
           },
           "response": []
@@ -73,8 +96,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/health/live",
-              "host": ["{{base_url}}"],
-              "path": ["health", "live"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health",
+                "live"
+              ]
             }
           },
           "response": []
@@ -86,8 +114,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/health/ready",
-              "host": ["{{base_url}}"],
-              "path": ["health", "ready"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health",
+                "ready"
+              ]
             }
           },
           "response": []
@@ -129,8 +162,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/v1/auth/google",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "auth", "google"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google"
+              ]
             },
             "description": "Authenticate with a Google ID token. The `requested_type` can be either `car_owner` or `vendor`. On success, the test script automatically saves the access and refresh tokens to collection variables."
           },
@@ -168,8 +208,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/v1/auth/refresh",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "auth", "refresh"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
             },
             "description": "Rotate the refresh token. The old token is revoked and a new token pair is returned. The test script auto-updates the collection variables."
           },
@@ -191,8 +238,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/v1/auth/revoke",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "auth", "revoke"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "revoke"
+              ]
             },
             "description": "Revoke a refresh token. Returns 204 No Content on success."
           },
@@ -235,8 +289,14 @@
             },
             "url": {
               "raw": "{{base_url}}/api/v1/vehicles",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "vehicles"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles"
+              ]
             },
             "description": "Create a new vehicle for the authenticated user. The test script saves the returned vehicle ID to the `vehicle_id` variable for use in subsequent requests."
           },
@@ -249,8 +309,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/v1/vehicles?offset=0&limit=20",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "vehicles"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles"
+              ],
               "query": [
                 {
                   "key": "offset",
@@ -273,8 +339,15 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/v1/vehicles/{{vehicle_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "vehicles", "{{vehicle_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles",
+                "{{vehicle_id}}"
+              ]
             },
             "description": "Get a single vehicle by ID. Only the owner can access their vehicle; other users receive a 403."
           },
@@ -296,8 +369,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/v1/vehicles/{{vehicle_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "vehicles", "{{vehicle_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles",
+                "{{vehicle_id}}"
+              ]
             },
             "description": "Partially update a vehicle. Only fields provided in the body are updated; omitted fields remain unchanged."
           },
@@ -310,8 +390,15 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/v1/vehicles/{{vehicle_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "vehicles", "{{vehicle_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles",
+                "{{vehicle_id}}"
+              ]
             },
             "description": "Delete a vehicle. Returns 204 No Content on success."
           },
@@ -324,8 +411,15 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/v1/vehicles/00000000-0000-0000-0000-000000000000",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "vehicles", "00000000-0000-0000-0000-000000000000"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles",
+                "00000000-0000-0000-0000-000000000000"
+              ]
             },
             "description": "Test the 404 response when a vehicle ID does not exist."
           },
@@ -347,10 +441,726 @@
             },
             "url": {
               "raw": "{{base_url}}/api/v1/vehicles",
-              "host": ["{{base_url}}"],
-              "path": ["api", "v1", "vehicles"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles"
+              ]
             },
             "description": "Test Pydantic validation: empty make/model and year before 1886 should return 422."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Commerce",
+      "description": "Product catalog, inventory, cart, checkout, search, recommendations, and commerce ledger APIs.",
+      "item": [
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) {",
+                  "    pm.collectionVariables.set('product_id', json.id);",
+                  "    console.log('Product ID saved: '+json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"SKU-1001\",\n  \"name\": \"Auto Care Kit\",\n  \"description\": \"Essential maintenance kit for vehicle care.\",\n  \"category\": \"automotive\",\n  \"brand\": \"Autopedicare\",\n  \"price\": 2500,\n  \"image_url\": \"https://example.com/product.png\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products?offset=0&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products/search?q=care&category=automotive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "care"
+                },
+                {
+                  "key": "category",
+                  "value": "automotive"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Product Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products/recommendations?category=automotive&limit=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "automotive"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Inventory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"{{product_id}}\",\n  \"quantity\": 25,\n  \"low_stock_threshold\": 5,\n  \"location\": \"warehouse-lagos\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products/{{product_id}}/inventory",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products",
+                "{{product_id}}",
+                "inventory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/cart",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "cart"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) {",
+                  "    pm.collectionVariables.set('cart_id', json.id);",
+                  "    console.log('Cart ID saved: ' + json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"{{product_id}}\",\n  \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/cart/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "cart",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) {",
+                  "    pm.collectionVariables.set('order_id', json.id);",
+                  "    console.log('Order ID saved: '+json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cart_id\": \"{{cart_id}}\",\n  \"shipping_address\": \"14 Marina Road, Lagos, Nigeria\",\n  \"notes\": \"Fragile packaging requested\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/checkout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "checkout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List My Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/orders?offset=0&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Commerce Ledger",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/admin/ledger",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "admin",
+                "ledger"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Superadmin Commerce Ops",
+      "description": "Role-based commerce administration checks for superadmins, product managers, and inventory managers.",
+      "item": [
+        {
+          "name": "Superadmin Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_token\": \"superadmin-google-id-token\",\n  \"requested_type\": \"car_owner\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/google",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product as Product Manager",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"SUP-9001\",\n  \"name\": \"Premium Brake Fluid\",\n  \"description\": \"High-performance brake fluid for premium maintenance.\",\n  \"category\": \"automotive\",\n  \"brand\": \"Autopedicare\",\n  \"price\": 4200,\n  \"image_url\": \"https://example.com/brake-fluid.png\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Inventory as Inventory Manager",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"{{product_id}}\",\n  \"quantity\": 40,\n  \"low_stock_threshold\": 8,\n  \"location\": \"warehouse-abuja\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products/{{product_id}}/inventory",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products",
+                "{{product_id}}",
+                "inventory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View Commerce Ledger",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/admin/ledger",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "admin",
+                "ledger"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unauthorized Product Access Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/commerce/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "commerce",
+                "products"
+              ]
+            }
+          },
+          "description": "Non-superadmin or non-commerce role should be rejected with 403 when attempting admin-level commerce actions.",
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Finance & Gateway Admin",
+      "description": "Superadmin-only finance controls for gateway configuration, activation, wallet top-up, and signature-verified provider callbacks.",
+      "item": [
+        {
+          "name": "List Gateway Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/gateway/settings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "gateway",
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Configure Paystack Gateway",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"paystack\",\n  \"public_key\": \"pk_test_xxx\",\n  \"secret_key\": \"sk_test_xxx\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/gateway/settings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "gateway",
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Configure Flutterwave Gateway",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"flutterwave\",\n  \"public_key\": \"FLWPUBK_TEST_xxx\",\n  \"secret_key\": \"FLWSECK_TEST_xxx\",\n  \"is_active\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/gateway/settings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "gateway",
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activate Gateway",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/gateway/settings/00000000-0000-0000-0000-000000000000/activate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "gateway",
+                "settings",
+                "00000000-0000-0000-0000-000000000000",
+                "activate"
+              ]
+            }
+          },
+          "description": "Replace the UUID with the gateway ID returned from the settings list or create call before executing.",
+          "response": []
+        },
+        {
+          "name": "Wallet Top Up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 2500,\n  \"currency\": \"NGN\",\n  \"provider\": \"paystack\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/wallet/topup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "wallet",
+                "topup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Wallet Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/wallet/transactions?offset=0&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "wallet",
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Paystack Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-paystack-signature",
+                "value": "replace-with-valid-signature"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"charge.success\",\n  \"data\": {\n    \"reference\": \"PAYSTACK-REF-001\",\n    \"status\": \"success\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/paystack/webhook",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "paystack",
+                "webhook"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Flutterwave Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "verif-hash",
+                "value": "replace-with-valid-signature"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"charge.completed\",\n  \"data\": {\n    \"tx_ref\": \"FLW-REF-001\",\n    \"status\": \"successful\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/flutterwave/webhook",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "flutterwave",
+                "webhook"
+              ]
+            }
           },
           "response": []
         }

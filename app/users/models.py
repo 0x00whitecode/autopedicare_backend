@@ -78,3 +78,27 @@ class User(Base):
         back_populates="owner",
         cascade="all, delete-orphan",
     )
+
+    fleet_vehicles: Mapped[list["FleetVehicle"]] = relationship(
+        "FleetVehicle",
+        back_populates="owner",
+        cascade="all, delete-orphan",
+    )
+
+    wallet_transactions: Mapped[list["WalletTransaction"]] = relationship(
+        "WalletTransaction",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+    carts: Mapped[list["Cart"]] = relationship(
+        "Cart",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+    orders: Mapped[list["Order"]] = relationship(
+        "Order",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
